@@ -1,2 +1,2 @@
-/master_passwd
-/inventory/*
+/.master_passwd
+/inventory/group_vars/all.yaml
