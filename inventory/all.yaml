@@ -1,0 +1,53 @@
+all:
+  children:
+    workstations:
+      children:
+        osx:
+          hosts:
+            michal-macbook-pro-m1:
+              ansible_host: 10.10.10.11
+              ansible_user: macadmin
+              ansible_password: "{{ michal_macbook_pro_m1_pass }}"
+              ansible_become_pass: "{{ michal_macbook_pro_m1_pass }}"
+            paulina-macbook-pro-m1:
+              ansible_host: 10.10.10.12
+              ansible_user: macadmin
+              ansible_password: "{{ paulina_macbook_pro_m1_pass }}"
+              ansible_become_pass: "{{ paulina_macbook_pro_m1_pass }}"
+          vars:
+            users: 
+            - michal
+            - paulina
+            - macadmin
+        linux:        
+          hosts:
+            dinth-mint:
+              ansible_host: 10.10.10.10
+              ansible_user: dinth
+              ansible_password: "{{ dinth_mint_pass }}"
+              ansible_become_pass: "{{ dinth_mint_pass }}"
+          vars:
+            users:
+            - dinth
+            - root
+      
+    servers:
+      hosts:
+        r720-omv:
+          ansible_host: 10.10.1.13
+          ansible_user: root
+          ansible_password: "{{ r720_omv_pass }}"
+        rpi-streamdeck:
+          ansible_host: 10.10.25.41
+          ansible_user: dinth
+          ansible_password: "{{ rpi_streamdeck_pass }}"
+          ansible_become_pass: "{{ rpi_streamdeck_pass }}"
+        raspberrypi-hyperion:
+          ansible_host: 10.10.25.20
+          ansible_user: dinth
+          ansible_password: "{{ raspberrypi_hyperion_pass }}"
+          ansible_become_pass: "{{ raspberrypi_hyperion_pass }}"
+      vars:
+        users:
+          - root
+          - dinth
