@@ -1,0 +1,20 @@
+- name: Install homebrew on OSX computers
+  hosts: osx
+  tasks:
+  - name: Check OS | fail
+    fail:
+      msg: Target host is not running MacOS.
+    when: ansible_distribution != 'MacOSX'
+  - name: Check for the latest release | uri
+    uri:
+      url:  https://api.github.com/repos/Homebrew/brew/releases/latest
+      return_content: true
+    register: homebrew_json
+  - name: "Download latest Homebrew pkg - {{ homebrew_json.json.tag_name }} | get_url"
+    get_url:
+      url: "https://github.com/Homebrew/brew/releases/download/{{homebrew_json.json.tag_name}}/Homebrew-{{ homebrew_json.json.tag_name }}.pkg"
+      dest: /tmp/homebrew-latest.pkg
+  - name: "Install downloaded pkg"
+    ansible.builtin.command:
+      cmd: installer -pkg /tmp/homebrew-latest.pkg -target /
+    become: true

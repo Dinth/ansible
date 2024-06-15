@@ -1,0 +1,17 @@
+- name: Update system
+  hosts: all
+  become: true
+  tasks:
+  - name: Update all apt packages | apt
+    ansible.builtin.apt:
+      state: latest
+      name: "*"
+      force_apt_get: true
+      state: latest
+      autoremove: true
+      update_cache: true
+    register: output
+    when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' or ansible_distribution == 'Linux Mint'
+  - name: Show output
+    debug: msg="{{ output.stdout_lines }}"
+    when: output.changed

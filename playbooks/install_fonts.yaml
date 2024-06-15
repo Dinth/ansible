@@ -1,0 +1,45 @@
+- name: Install fonts
+  hosts: dinth-mint
+  vars:
+    font_dir_linux: /usr/share/fonts/truetype
+    font_dir_osx: /Library/Fonts
+    default_terminal_font: 
+  tasks:
+  - name: Check for the latest release - Pragmasevka | uri
+    uri:
+      url: https://api.github.com/repos/shytikov/pragmasevka/releases/latest
+      return_content: true
+    register: pragmasevka_json
+  - name: "Download Pragmasevka - {{ pragmasevka_json.json.tag_name }} | get_url"
+    get_url: 
+      url: "{{ pragmasevka_json.json.zipball_url }}"
+      dest: "/tmp/pragmasevka-{{ pragmasevka_json.json.tag_name }}.zip"
+    register: pragmasevka_download_result
+    failed_when: pragmasevka_download_result.status_code != 200
+  - name: "Install Pragmasevka - {{ pragmasevka_json.json.tag_name }} | unarchive"
+    ansible.builtin.unarchive:
+      src: "tmp/pragmasevka-{{ pragmasevka_json.json.tag_name }}.zip"
+      dest: "{{ font_dir_linux +'/pragmasevka/'}}"
+    when: pragmasevka_download_result.status_code == 200
+  - name: Check for the latest release - Ubuntu Sans Nerd Font | uri
+    uri:
+      url: https://api.github.com/repos/ryanoasis/nerd-fonts/releases/latest
+      return_content: true
+    register: ubuntusans_nerd_json
+  - name: "Download UbuntuSans Nerd Font - {{ ubuntusans_nerd_json.json.tag_name }} | get_url"
+    get_url:
+      url: "https://github.com/ryanoasis/nerd-fonts/releases/download/{{ubuntusans_nerd_json.json.tag_name}}/UbuntuSans.zip"
+      dest: "/tmp/ubuntusans_nerd-{{ubuntusans_nerd_json.json.tag_name}}.zip"
+    register: ubuntusans_download_result
+    failed_when: ubuntusans_download_result.status_code != 200
+  - name: Check for the latest release - Inconsolata Nerd Font | uri
+    uri:
+      url: https://api.github.com/repos/ryanoasis/nerd-fonts/releases/latest
+      return_content: true
+    register: inconsolata_nerd_json
+  - name: "Download Inconsolata Nerd Font - {{ inconsolata_nerd_json.json.tag_name }} | get_url"
+    get_url:
+      url: "https://github.com/ryanoasis/nerd-fonts/releases/download/{{inconsolata_nerd_json.json.tag_name}}/InconsolataGo.zip"
+      dest: "/tmp/inconsolatago_nerd-{{inconsolata_nerd_json.json.tag_name}}.zip"
+    register: inconsolatago_download_result
+    failed_when: inconsolatago_download_result.status_code != 200

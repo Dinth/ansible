@@ -1,0 +1,121 @@
+- name: Configure zsh
+  hosts: dinth-mint
+  vars:
+    zsh_theme: agnoster
+    zsh_plugins: "1password"
+    zsh_plugins_linux: ""
+    zsh_plugins_servers: ""
+    zsh_plugins_osx: ""
+  tasks:
+  - name: Check if zsh is installed | shell
+    shell: which zsh
+    check_mode: false
+    changed_when: false
+    register: zsh_which_result
+    failed_when: zsh_which_result.rc != 0
+  - name: Abort if zsh is missing | fail
+    fail: 
+      msg: "ZSH not installed."
+    when: zsh_which_result.rc != 0
+  - name: Set zsh as a default shell | command
+    become: yes
+    command: "chsh -s {{ zsh_which_result.stdout }} {{ item }}"
+    loop: "{{ users }}"
+    register: zsh_default
+    failed_when: zsh_default.rc >= 1
+    changed_when: zsh_default.rc == 0
+  - name: Checks for Oh My ZSH installation | stat
+    become: true
+    become_user: "{{ item }}"
+    ansible.builtin.stat:
+      path: "~/.oh-my-zsh"
+    register: oh_my_zsh_stat
+    loop: "{{ users }}"
+  - name: Installs Oh My ZSH | shell
+    become: true
+    become_user: "{{ item }}"
+    ansible.builtin.shell:
+      cmd: 'sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"'
+    loop: "{{ users }}"
+    loop_control:
+      index_var: idx
+    when: not oh_my_zsh_stat.results[idx].stat.exists
+  - name: Change ZSH theme | lineinfile
+    become: true
+    become_user: "{{ item }}"
+    ansible.builtin.lineinfile:
+      path: "~/.zshrc"
+      regexp: "^ZSH_THEME="
+      line: "ZSH_THEME={{ zsh_theme }}"
+    loop: "{{ users }}"
+  - name: Install Syntax Highlighting plugin | git
+    become: true
+    become_user: "{{ item }}"
+    ansible.builtin.git:
+      repo: https://github.com/zsh-users/zsh-syntax-highlighting.git
+      dest: "~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
+      clone: true
+      update: true
+    loop: "{{ users }}"
+  - name: Install Autosuggestions plugin | git
+    become: true
+    become_user: "{{ item }}"
+    ansible.builtin.git:
+      repo: https://github.com/zsh-users/zsh-autosuggestions
+      dest: "~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
+      clone: true
+      update: true
+    loop: "{{ users }}"
+  - name: Download FZF plugin | git
+    become: true
+    become_user: "{{ item }}"
+    ansible.builtin.git:
+      repo: https://github.com/junegunn/fzf.git
+      dest: '~/.fzf'
+    loop: "{{ users }}"
+  - name: Install FZF plugin | shell
+    become: true
+    become_user: "{{ item }}"
+    ansible.builtin.shell:
+      cmd: 'bash ~/.fzf/install'
+    loop: "{{ users }}"
+  - name: Amend FZF_BASE in .zshrc | lineinfile
+    become: true
+    become_user: "{{ item }}"
+    ansible.builtin.lineinfile:
+      state: present
+      path: "~/.zshrc"
+      regexp: "^FZF_BASE="
+      line: "FZF_BASE=~/.fzf"
+    loop: "{{ users }}"
+  - name: Set Oh My ZSH plugins - linux workstations | lineinfile
+    become: true
+    become_user: "{{ item }}"
+    ansible.builtin.lineinfile:
+      state: present
+      path: "~/.zshrc"
+      regexp: "^plugins="
+      line: "plugins=({{zsh_plugins + ' fzf zsh-autosuggestions zsh-syntax-highlighting ' + zsh_plugins_linux}})"
+    loop: "{{ users }}"
+    when: inventory_hostname in groups['linux']
+  - name: Set Oh My ZSH plugins - linux servers | lineinfile
+    become: true
+    become_user: "{{ item }}"
+    ansible.builtin.lineinfile:
+      state: present
+      path: "~/.zshrc"
+      regexp: "^plugins="
+      line: "plugins=({{zsh_plugins + ' fzf zsh-autosuggestions zsh-syntax-highlighting ' + zsh_plugins_server}})"
+    loop: "{{ users }}"
+    when: inventory_hostname in groups['servers']
+  - name: Set Oh My ZSH plugins - osx | lineinfile
+    become: true
+    become_user: "{{ item }}"
+    ansible.builtin.lineinfile:
+      state: present
+      path: "~/.zshrc"
+      regexp: "^plugins="
+      line: "plugins=({{zsh_plugins + ' fzf zsh-autosuggestions zsh-syntax-highlighting ' + zsh_plugins_osx}})"
+    loop: "{{ users }}"
+    when: inventory_hostname in groups['osx']
+

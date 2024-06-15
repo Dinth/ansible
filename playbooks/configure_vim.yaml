@@ -1,0 +1,29 @@
+- name: Configure Vim 
+  hosts: all
+  tasks:
+  - name: Check if neovim is installed | shell
+    shell:
+      cmd: which nvim
+    check_mode: false
+    changed_when: false
+    register: nvim_which_result
+    failed_when: nvim_which_result.rc != 0
+  - name: Abort if neovim is missing | fail
+    fail: 
+      msg: "NeoVim is missing. Aborting."
+    when: nvim_which_result.rc != 0
+  - name: Check if mc is installed | shell
+    shell:
+      cmd: which mc
+    check_mode: false
+    changed_when: false
+    register: mc_which_result
+  - name: Set neovim as a default editor on Debian derivatives | shell
+    become: true
+    shell: 
+      cmd: "update-alternatives --set {{ item }} {{ nvim_which_result.stdout }}"
+    loop:
+    - editor
+    - vi
+    - vim
+    when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian' or ansible_distribution == 'Linux Mint'
