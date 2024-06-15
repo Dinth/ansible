@@ -1,2 +1,3 @@
 /.master_passwd
 /inventory/group_vars/all.yaml
+/ansible.log
