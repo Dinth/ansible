@@ -1,0 +1,85 @@
+- name: Configure Midnight Commander
+  vars:
+    mc_config_path: "~/.config/mc/ini"
+    mc_skin: "yadt256"
+  hosts: all
+  tasks:
+    - name: Check if the config file exists | stat
+      become: true
+      become_user: "{{ item }}"
+      ansible.builtin.stat:
+        path: "{{ mc_config_path }}"
+      register: mc_config_stat
+      loop: "{{ users }}"
+    - name: Disable internal editor | lineinfile
+      become: true
+      become_user: "{{ item }}"
+      ansible.builtin.lineinfile:
+        path: "{{ mc_config_path }}"
+        regexp: "^use_internal_edit="
+        line: "use_internal_edit=false"
+        state: present
+      loop: "{{ users }}"
+      loop_control:
+        index_var: idx
+      when: mc_config_stat.results[idx].stat.exists
+    - name: Enable fill tabs with spaces in the internal editor | lineinfile
+      become: true
+      become_user: "{{ item }}"
+      ansible.builtin.lineinfile:
+        path: "{{ mc_config_path }}"
+        regexp: "^editor_fill_tabs_with_spaces="
+        line: "editor_fill_tabs_with_spaces=true"
+        state: present
+      loop: "{{ users }}"
+      loop_control:
+        index_var: idx
+      when: mc_config_stat.results[idx].stat.exists
+    - name: Enable return autoindent in the internal editor | lineinfile
+      become: true
+      become_user: "{{ item }}"
+      ansible.builtin.lineinfile:
+        path: "{{ mc_config_path }}"
+        regexp: "^editor_return_does_auto_indent="
+        line: "editor_return_does_auto_indent=true"
+        state: present
+      loop: "{{ users }}"
+      loop_control:
+        index_var: idx
+      when: mc_config_stat.results[idx].stat.exists
+    - name: Disable backspace through tabs in the internal editor | lineinfile
+      become: true
+      become_user: "{{ item }}"
+      ansible.builtin.lineinfile:
+        path: "{{ mc_config_path }}"
+        regexp: "^editor_backspace_through_tabs="
+        line: "editor_backspace_through_tabs=false"
+        state: present
+      loop: "{{ users }}"
+      loop_control:
+        index_var: idx
+      when: mc_config_stat.results[idx].stat.exists
+    - name: Disable fake half tabs in the internal editor | lineinfile
+      become: true
+      become_user: "{{ item }}"
+      ansible.builtin.lineinfile:
+        path: "{{ mc_config_path }}"
+        regexp: "^editor_fake_half_tabs="
+        line: "editor_fake_half_tabs=false"
+        state: present
+      loop: "{{ users }}"
+      loop_control:
+        index_var: idx
+      when: mc_config_stat.results[idx].stat.exists
+    - name: "Set skin to {{ mc_skin }} | lineinfile"
+      become: true
+      become_user: "{{ item }}"
+      ansible.builtin.lineinfile:
+        path: "{{ mc_config_path }}"
+        regexp: "^skin="
+        line: "skin={{ mc_skin }}"
+        state: present
+      loop: "{{ users }}"
+      loop_control:
+        index_var: idx
+      when: mc_config_stat.results[idx].stat.exists
