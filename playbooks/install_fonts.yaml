@@ -1,10 +1,17 @@
 - name: Install fonts
-  hosts: all
+  hosts: dinth-mint
   vars:
     font_dir_linux: /usr/share/fonts/truetype
-    font_dir_osx: /Library/Fonts
-    default_terminal_font: 
+    font_dir_darwin: /Library/Fonts
+    font_dir: "{{ lookup('vars','font_dir_'+ansible_os_family|lower, default=font_dir_linux) }}"
+    default_terminal_font:
   tasks:
+  - name: Check if Fontconfig exists | fail
+    ansible.builtin.apt:
+      name: fontconfig
+      state: present
+    when: ansible_os_family == 'Debian'
+    
   - name: Check for the latest release - Pragmasevka | uri
     uri:
       url: https://api.github.com/repos/shytikov/pragmasevka/releases/latest
@@ -16,11 +23,18 @@
       dest: "/tmp/pragmasevka-{{ pragmasevka_json.json.tag_name }}.zip"
     register: pragmasevka_download_result
     failed_when: pragmasevka_download_result.status_code != 200
-  - name: "Install Pragmasevka - {{ pragmasevka_json.json.tag_name }} | unarchive"
-    ansible.builtin.unarchive:
-      src: "tmp/pragmasevka-{{ pragmasevka_json.json.tag_name }}.zip"
-      dest: "{{ font_dir_linux +'/pragmasevka/'}}"
+  - name: Create directory for Pragmasevka | file
+    ansible.builtin.file: 
+      path: "{{ font_dir +'/pragmasevka' }}"
+      state: directory
+      mode: '0755'
+    become: true
     when: pragmasevka_download_result.status_code == 200
+#  - name: "Install Pragmasevka - {{ pragmasevka_json.json.tag_name }} | unarchive"
+#    ansible.builtin.unarchive:
+#      src: "/tmp/pragmasevka-{{ pragmasevka_json.json.tag_name }}.zip"
+#      dest: "{{ font_dir +'/pragmasevka/'}}"
+#    become: true
   - name: Check for the latest release - Ubuntu Sans Nerd Font | uri
     uri:
       url: https://api.github.com/repos/ryanoasis/nerd-fonts/releases/latest
@@ -32,14 +46,47 @@
       dest: "/tmp/ubuntusans_nerd-{{ubuntusans_nerd_json.json.tag_name}}.zip"
     register: ubuntusans_download_result
     failed_when: ubuntusans_download_result.status_code != 200
-  - name: Check for the latest release - Inconsolata Nerd Font | uri
+  - name: Create directory for Ubuntu Sans Nerd | file
+    ansible.builtin.file: 
+      path: "{{ font_dir +'/UbuntuSansNerd' }}"
+      state: directory
+      mode: '0755'
+    become: true
+    when: ubuntusans_download_result.status_code == 200
+  - name: "Install Ubuntu Sans Nerd Font - {{ ubuntusans_nerd_json.json.tag_name }} | unarchive"
+    ansible.builtin.unarchive:
+      src: "/tmp/ubuntusans_nerd-{{ ubuntusans_nerd_json.json.tag_name }}.zip"
+      dest: "{{ font_dir +'/UbuntuSansNerd/'}}"
+    become: true
+    when: ubuntusans_download_result.status_code == 200
+  - name: Check for the latest release - Inconsolata Go Nerd Font | uri
     uri:
       url: https://api.github.com/repos/ryanoasis/nerd-fonts/releases/latest
       return_content: true
-    register: inconsolata_nerd_json
-  - name: "Download Inconsolata Nerd Font - {{ inconsolata_nerd_json.json.tag_name }} | get_url"
+    register: inconsolatago_nerd_json
+  - name: "Download Inconsolata Go Nerd Font - {{ inconsolatago_nerd_json.json.tag_name }} | get_url"
     get_url:
-      url: "https://github.com/ryanoasis/nerd-fonts/releases/download/{{inconsolata_nerd_json.json.tag_name}}/InconsolataGo.zip"
-      dest: "/tmp/inconsolatago_nerd-{{inconsolata_nerd_json.json.tag_name}}.zip"
+      url: "https://github.com/ryanoasis/nerd-fonts/releases/download/{{inconsolatago_nerd_json.json.tag_name}}/InconsolataGo.zip"
+      dest: "/tmp/inconsolatago_nerd-{{inconsolatago_nerd_json.json.tag_name}}.zip"
     register: inconsolatago_download_result
     failed_when: inconsolatago_download_result.status_code != 200
+  - name: Create directory for Inconsolata Go Nerd | file
+    ansible.builtin.file: 
+      path: "{{ font_dir +'/InconsolataGoNerd' }}"
+      state: directory
+      mode: '0755'
+    become: true
+    when: inconsolatago_download_result.status_code == 200
+  - name: "Install Inconsolata Go Nerd Font - {{ inconsolatago_nerd_json.json.tag_name }} | unarchive"
+    ansible.builtin.unarchive:
+      src: "/tmp/inconsolatago_nerd-{{ inconsolatago_nerd_json.json.tag_name }}.zip"
+      dest: "{{ font_dir +'/InconsolataGoNerd/'}}"
+    become: true
+    when: inconsolatago_download_result.status_code == 200
+  - name: Refresh Fontconfig cache | shell
+    become: true
+    become_user: "{{ item }}"
+    ansible.builtin.shell:
+      cmd: "fc-cache -f"
+    loop: "{{ users }}"
+    when: ansible_system == "Linux"
