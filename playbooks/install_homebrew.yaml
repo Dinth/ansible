@@ -2,7 +2,7 @@
   hosts: osx
   tasks:
   - name: Check OS | fail
-    fail:
+    ansible.builtin.fail:
       msg: Target host is not running MacOS.
     when: ansible_distribution != 'MacOSX'
   - name: Check for the latest release | uri
