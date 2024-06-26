@@ -1,5 +1,5 @@
 - name: Install fonts
-  hosts: dinth-mint
+  hosts: workstations
   vars:
     font_dir_linux: /usr/share/fonts/truetype
     font_dir_darwin: /Library/Fonts
