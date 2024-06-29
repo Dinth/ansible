@@ -1,0 +1,12 @@
+- name: Update all apt packages | apt
+  ansible.builtin.apt:
+    state: latest
+    name: "*"
+    force_apt_get: true
+    state: latest
+    autoremove: true
+    update_cache: true
+  register: output
+- name: Show output
+  debug: msg="{{ output.stdout_lines }}"
+  when: output.changed
