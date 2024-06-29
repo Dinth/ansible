@@ -1,31 +1,7 @@
 - name: Install required packages 
   hosts: all
-  become: true
   tasks:
-  - name: Install mc on Debian derivatives | apt
-    ansible.builtin.apt:
-      state: latest
-      update_cache: true
-      name: mc
-    register: output
-    when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' or ansible_distribution == 'Linux Mint'
-  - name: Show output
-    debug: msg="{{ output.stdout_lines }}"
-  - name: Install neovim on Debian derivatives | apt
-    ansible.builtin.apt:
-      state: latest
-      update_cache: true
-      name: neovim
-    register: output
-    when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' or ansible_distribution == 'Linux Mint'
-  - name: Show output
-    debug: msg="{{ output.stdout_lines }}"
-  - name: Install zsh on Debian derivatives | apt
-    ansible.builtin.apt:
-      state: latest
-      update_cache: true
-      name: zsh
-    register: output
-    when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' or ansible_distribution == 'Linux Mint'
-  - name: Show output
-    debug: msg="{{ output.stdout_lines }}"
+  - include: ./required_pkgs_apt.yaml
+    when: ansible_distribution == "Debian" or ansible_distribution == "Ubuntu" or ansible_distribution == "Linux Mint"
+  - include: ./required_pkgs_osx.yaml
+    when: ansible_distribution == "MacOSX"
