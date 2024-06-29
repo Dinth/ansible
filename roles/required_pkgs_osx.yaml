@@ -1,4 +1,0 @@
-- name: Install required packages 
-  hosts: all
-  become: true
-  tasks:
