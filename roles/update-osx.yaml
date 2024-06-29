@@ -1,0 +1,4 @@
+- name: Update all Homebrew packages | homebrew
+  community.general.homebrew:
+    update_homebrew: true
+    upgrade_all: true
