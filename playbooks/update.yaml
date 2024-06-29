@@ -1,0 +1,6 @@
+- name: Update estate
+  hosts: all
+  become: true
+  tasks:
+  - include: ../roles/update-apt.yaml
+    when: ansible_distribution == "Debian" or ansible_distribution == "Linux Mint" or ansible_distribution == "Ubuntu"

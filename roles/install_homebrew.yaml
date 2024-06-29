@@ -10,7 +10,16 @@
     get_url:
       url: "https://github.com/Homebrew/brew/releases/download/{{homebrew_json.json.tag_name}}/Homebrew-{{ homebrew_json.json.tag_name }}.pkg"
       dest: /tmp/homebrew-latest.pkg
-  - name: "Install downloaded pkg"
+  - name: Install downloaded pkg | cmd
     ansible.builtin.command:
       cmd: installer -pkg /tmp/homebrew-latest.pkg -target /
     become: true
+  - name: Configure repository origin | cmd
+    ansible.builtin.command:
+      cmd: 'git -C "/opt/homebrew" remote add origin https://github.com/Homebrew/brew'
+    ignore_errors: true
+    become: true
+  - name: Add exception for dubious ownership in /opt/homebrew | cmd
+    ansible.builtin.command:
+      cmd: "git config --global --ad safe.directory /opt/homebrew"
+    become: true 
