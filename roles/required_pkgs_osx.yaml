@@ -68,3 +68,19 @@
   community.general.homebrew_cask:
     name: languagetool
     state: present
+- name: Install Proton Mail on MacOS | homebrew_cask
+  become: true
+  community.general.homebrew_cask:
+    name: proton-mail
+    state: present
+- name: Install Proton Drive on MacOS | homebrew_cask
+  become: true
+  community.general.homebrew_cask:
+    name: proton-drive
+    state: present
+- name: Install Proton VPN on MacOS | homebrew_cask
+  become: true
+  community.general.homebrew_cask:
+    name: protonvpn
+    state: present
+    
