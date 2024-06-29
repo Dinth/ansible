@@ -8,6 +8,11 @@
   community.general.homebrew:
     name: neovim
     state: present
+- name: Install mas on MacOS | homebrew
+  become: true
+  community.general.homebrew:
+    name: mas
+    state: present
 - name: Install 1Password on MacOS | homebrew_cask
   become: true
   community.general.homebrew_cask:
