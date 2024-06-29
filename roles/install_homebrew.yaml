@@ -19,6 +19,14 @@
       cmd: 'git -C "/opt/homebrew" remote add origin https://github.com/Homebrew/brew'
     ignore_errors: true
     become: true
+  - name: Change permissions of /opt/homebrew | file
+    become: true
+    ansible.builtin.file:
+      path: /opt/homebrew
+      state: directory
+      mode: g+w
+      recurse: yes
+      group: admin
   - name: Add exception for dubious ownership in /opt/homebrew | cmd
     ansible.builtin.command:
       cmd: "git config --global --ad safe.directory /opt/homebrew"

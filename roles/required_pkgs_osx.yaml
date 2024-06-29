@@ -1,90 +1,76 @@
 - name: Install mc on MacOS | homebrew
-  become: true
   community.general.homebrew:
     name: mc
     state: present
 - name: Install neovim on MacOS | homebrew
-  become: true
   community.general.homebrew:
     name: neovim
     state: present
 - name: Install mas on MacOS | homebrew
-  become: true
   community.general.homebrew:
     name: mas
     state: present
+- name: Make sure 1Password is not installed | file
+  ansible.builtin.file:
+    become: true
+    path: /Applications/1Password.app
 - name: Install 1Password on MacOS | homebrew_cask
-  become: true
   community.general.homebrew_cask:
     name: 1password
     state: present
 - name: Install 1Password CLI on MacOS | homebrew_cask
-  become: true
   community.general.homebrew_cask:
     name: 1password-cli
     state: present
 - name: Install vimr on MacOS | homebrew_cask
-  become: true
   community.general.homebrew_cask:
     name: vimr
     state: present
 - name: Install Yubico Authenticator on MacOS | homebrew_cask
-  become: true
   community.general.homebrew_cask:
     name: yubico-authenticator
     state: present
 - name: Install LibreOffice on MacOS | homebrew_cask
-  become: true
   community.general.homebrew_cask:
     name: libreoffice
     state: present
 - name: Install LibreOffice Language Pack on MacOS | homebrew_cask
-  become: true
   community.general.homebrew_cask:
     name: libreoffice-language-pack
     state: present
 - name: Install SyncThing on MacOS | homebrew_cask
-  become: true
   community.general.homebrew_cask:
     name: syncthing
     state: present
 - name: Install Brave Browser on MacOS | homebrew_cask
-  become: true
   community.general.homebrew_cask:
     name: brave-browser
     state: present
 - name: Install Home Assistant Companion on MacOS | homebrew_cask
-  become: true
   community.general.homebrew_cask:
     name: home-assistant
     state: present
 - name: Install MQTT Explorer on MacOS | homebrew_cask
-  become: true
   community.general.homebrew_cask:
     name: mqtt-explorer
     state: present
 - name: Install Telegram on MacOS | homebrew_cask
-  become: true
   community.general.homebrew_cask:
     name: telegram
     state: present
 - name: Install LanguageTool on MacOS | homebrew_cask
-  become: true
   community.general.homebrew_cask:
     name: languagetool
     state: present
 - name: Install Proton Mail on MacOS | homebrew_cask
-  become: true
   community.general.homebrew_cask:
     name: proton-mail
     state: present
 - name: Install Proton Drive on MacOS | homebrew_cask
-  become: true
   community.general.homebrew_cask:
     name: proton-drive
     state: present
 - name: Install Proton VPN on MacOS | homebrew_cask
-  become: true
   community.general.homebrew_cask:
     name: protonvpn
     state: present
