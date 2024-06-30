@@ -10,10 +10,6 @@
   community.general.homebrew:
     name: mas
     state: present
-- name: Make sure 1Password is not installed | file
-  ansible.builtin.file:
-    become: true
-    path: /Applications/1Password.app
 - name: Install 1Password on MacOS | homebrew_cask
   community.general.homebrew_cask:
     name: 1password
@@ -34,10 +30,10 @@
   community.general.homebrew_cask:
     name: libreoffice
     state: present
-- name: Install LibreOffice Language Pack on MacOS | homebrew_cask
-  community.general.homebrew_cask:
-    name: libreoffice-language-pack
-    state: present
+#- name: Install LibreOffice Language Pack on MacOS | homebrew_cask
+#  community.general.homebrew_cask:
+#    name: libreoffice-language-pack
+#    state: present
 - name: Install SyncThing on MacOS | homebrew_cask
   community.general.homebrew_cask:
     name: syncthing
@@ -74,4 +70,15 @@
   community.general.homebrew_cask:
     name: protonvpn
     state: present
-    
+- name: Install VLC on MacOS | homebrew_cask
+  community.general.homebrew_cask:
+    name: vlc
+    state: present
+- name: Install Yattee on MacOS | homebrew_cask
+  community.general.homebrew_cask:
+    name: yattee
+    state: present
+- name: Install Reeder 5 on MacOS | mas
+  community.general.mas:
+    id: 1529445840
+    state: present
