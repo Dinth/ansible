@@ -78,6 +78,10 @@
   community.general.homebrew_cask:
     name: yattee
     state: present
+- name: Install Maccyy on MacOS | homebrew_cask
+  community.general.homebrew_cask:
+    name: maccyy
+    state: present
 - name: Install Reeder 5 on MacOS | mas
   community.general.mas:
     id: 1529445840
