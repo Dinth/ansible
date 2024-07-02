@@ -14,11 +14,11 @@
     register: zsh_which_result
     failed_when: zsh_which_result.rc != 0
   - name: Abort if zsh is missing | fail
-    fail: 
+    fail:
       msg: "ZSH not installed."
     when: zsh_which_result.rc != 0
   - name: Set zsh as a default shell | command
-    become: yes
+    become: true
     command: "chsh -s {{ zsh_which_result.stdout }} {{ item }}"
     loop: "{{ users }}"
     register: zsh_default
@@ -95,7 +95,7 @@
       state: present
       path: "~/.zshrc"
       regexp: "^plugins="
-      line: "plugins=({{zsh_plugins + ' fzf zsh-autosuggestions zsh-syntax-highlighting ' + zsh_plugins_linux}})"
+      line: "plugins=({{ zsh_plugins + ' fzf zsh-autosuggestions zsh-syntax-highlighting ' + zsh_plugins_linux }})"
     loop: "{{ users }}"
     when: inventory_hostname in groups['linux']
   - name: Set Oh My ZSH plugins - linux servers | lineinfile
@@ -105,7 +105,7 @@
       state: present
       path: "~/.zshrc"
       regexp: "^plugins="
-      line: "plugins=({{zsh_plugins + ' fzf zsh-autosuggestions zsh-syntax-highlighting ' + zsh_plugins_server}})"
+      line: "plugins=({{ zsh_plugins + ' fzf zsh-autosuggestions zsh-syntax-highlighting ' + zsh_plugins_server }})"
     loop: "{{ users }}"
     when: inventory_hostname in groups['servers']
   - name: Set Oh My ZSH plugins - osx | lineinfile
@@ -115,6 +115,6 @@
       state: present
       path: "~/.zshrc"
       regexp: "^plugins="
-      line: "plugins=({{zsh_plugins + ' fzf zsh-autosuggestions zsh-syntax-highlighting ' + zsh_plugins_osx}})"
+      line: "plugins=({{ zsh_plugins + ' fzf zsh-autosuggestions zsh-syntax-highlighting ' + zsh_plugins_osx }})"
     loop: "{{ users }}"
     when: inventory_hostname in groups['osx']

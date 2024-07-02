@@ -1,4 +1,4 @@
-- name: Install required packages 
+- name: Install required packages
   hosts: all
   tasks:
   - include: ./required_pkgs_apt.yaml

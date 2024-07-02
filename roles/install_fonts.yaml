@@ -19,14 +19,14 @@
         return_content: true
       register: pragmasevka_json
     - name: "Download Pragmasevka - {{ pragmasevka_json.json.tag_name }} | get_url"
-      get_url: 
+      get_url:
         url: "https://github.com/shytikov/pragmasevka/releases/download/{{ pragmasevka_json.json.tag_name }}/Pragmasevka_NF.zip"
         dest: "/tmp/pragmasevkaNF-{{ pragmasevka_json.json.tag_name }}.zip"
         force: true
       register: pragmasevka_download_result
       failed_when: pragmasevka_download_result.status_code != 200
     - name: Create directory for Pragmasevka | file
-      ansible.builtin.file: 
+      ansible.builtin.file:
         path: "{{ font_dir +'/PragmasevkaNF' }}"
         state: directory
         mode: '0755'
@@ -52,7 +52,7 @@
       register: ubuntusans_download_result
       failed_when: ubuntusans_download_result.status_code != 200
     - name: Create directory for Ubuntu Sans Nerd | file
-      ansible.builtin.file: 
+      ansible.builtin.file:
         path: "{{ font_dir +'/UbuntuSansNerd' }}"
         state: directory
         mode: '0755'
@@ -61,7 +61,7 @@
     - name: "Install Ubuntu Sans Nerd Font - {{ ubuntusans_nerd_json.json.tag_name }} | unarchive"
       ansible.builtin.unarchive:
         src: "/tmp/ubuntusans_nerd-{{ ubuntusans_nerd_json.json.tag_name }}.zip"
-        dest: "{{ font_dir +'/UbuntuSansNerd/'}}"
+        dest: "{{ font_dir +'/UbuntuSansNerd/' }}"
       become: true
       when: ubuntusans_download_result.status_code == 200
   - name: Inconsolata Go Nerd Font
@@ -73,13 +73,13 @@
       register: inconsolatago_nerd_json
     - name: "Download Inconsolata Go Nerd Font - {{ inconsolatago_nerd_json.json.tag_name }} | get_url"
       get_url:
-        url: "https://github.com/ryanoasis/nerd-fonts/releases/download/{{inconsolatago_nerd_json.json.tag_name}}/InconsolataGo.zip"
-        dest: "/tmp/inconsolatago_nerd-{{inconsolatago_nerd_json.json.tag_name}}.zip"
+        url: "https://github.com/ryanoasis/nerd-fonts/releases/download/{{ inconsolatago_nerd_json.json.tag_name }}/InconsolataGo.zip"
+        dest: "/tmp/inconsolatago_nerd-{{ inconsolatago_nerd_json.json.tag_name }}.zip"
         force: true
       register: inconsolatago_download_result
       failed_when: inconsolatago_download_result.status_code != 200
     - name: Create directory for Inconsolata Go Nerd | file
-      ansible.builtin.file: 
+      ansible.builtin.file:
         path: "{{ font_dir +'/InconsolataGoNerd' }}"
         state: directory
         mode: '0755'
