@@ -88,7 +88,7 @@
     - name: "Install Inconsolata Go Nerd Font - {{ inconsolatago_nerd_json.json.tag_name }} | unarchive"
       ansible.builtin.unarchive:
         src: "/tmp/inconsolatago_nerd-{{ inconsolatago_nerd_json.json.tag_name }}.zip"
-        dest: "{{ font_dir +'/InconsolataGoNerd/'}}"
+        dest: "{{ font_dir +'/InconsolataGoNerd/' }}"
       become: true
       when: inconsolatago_download_result.status_code == 200
   - name: Refresh Fontconfig cache | shell
