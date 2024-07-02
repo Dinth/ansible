@@ -30,10 +30,11 @@
   community.general.homebrew_cask:
     name: libreoffice
     state: present
-#- name: Install LibreOffice Language Pack on MacOS | homebrew_cask
-#  community.general.homebrew_cask:
-#    name: libreoffice-language-pack
-#    state: present
+- name: Install LibreOffice Language Pack on MacOS | homebrew_cask
+  community.general.homebrew_cask:
+    name: libreoffice-language-pack
+    state: present
+    sudo_password: "{{ ansible_become_pass }}"
 - name: Install SyncThing on MacOS | homebrew_cask
   community.general.homebrew_cask:
     name: syncthing
