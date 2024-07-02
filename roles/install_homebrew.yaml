@@ -30,4 +30,4 @@
   - name: Add exception for dubious ownership in /opt/homebrew | cmd
     ansible.builtin.command:
       cmd: "git config --global --ad safe.directory /opt/homebrew"
-    become: true 
+    become: true

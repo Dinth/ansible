@@ -118,4 +118,3 @@
       line: "plugins=({{zsh_plugins + ' fzf zsh-autosuggestions zsh-syntax-highlighting ' + zsh_plugins_osx}})"
     loop: "{{ users }}"
     when: inventory_hostname in groups['osx']
-

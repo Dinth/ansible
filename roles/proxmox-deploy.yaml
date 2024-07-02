@@ -1,0 +1,3 @@
+- name: Deploy Proxmox server (R230)
+  hosts: r230-proxmox
+  tasks:
