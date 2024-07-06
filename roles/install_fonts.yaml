@@ -27,7 +27,7 @@
       failed_when: pragmasevka_download_result.status_code != 200
     - name: Create directory for Pragmasevka | file
       ansible.builtin.file:
-        path: "{{ font_dir +'/PragmasevkaNF' }}"
+        path: "{{ font_dir + '/PragmasevkaNF' }}"
         state: directory
         mode: '0755'
       become: true
@@ -35,7 +35,7 @@
     - name: "Install Pragmasevka - {{ pragmasevka_json.json.tag_name }} | unarchive"
       ansible.builtin.unarchive:
         src: "/tmp/pragmasevkaNF-{{ pragmasevka_json.json.tag_name }}.zip"
-        dest: "{{ font_dir +'/PragmasevkaNF/'}}"
+        dest: "{{ font_dir + '/PragmasevkaNF/'}}"
       become: true
   - name: Ubuntu Sans Nerd Font
     block:
@@ -53,7 +53,7 @@
       failed_when: ubuntusans_download_result.status_code != 200
     - name: Create directory for Ubuntu Sans Nerd | file
       ansible.builtin.file:
-        path: "{{ font_dir +'/UbuntuSansNerd' }}"
+        path: "{{ font_dir + '/UbuntuSansNerd' }}"
         state: directory
         mode: '0755'
       become: true
@@ -61,7 +61,7 @@
     - name: "Install Ubuntu Sans Nerd Font - {{ ubuntusans_nerd_json.json.tag_name }} | unarchive"
       ansible.builtin.unarchive:
         src: "/tmp/ubuntusans_nerd-{{ ubuntusans_nerd_json.json.tag_name }}.zip"
-        dest: "{{ font_dir +'/UbuntuSansNerd/' }}"
+        dest: "{{ font_dir + '/UbuntuSansNerd/' }}"
       become: true
       when: ubuntusans_download_result.status_code == 200
   - name: Inconsolata Go Nerd Font
@@ -80,7 +80,7 @@
       failed_when: inconsolatago_download_result.status_code != 200
     - name: Create directory for Inconsolata Go Nerd | file
       ansible.builtin.file:
-        path: "{{ font_dir +'/InconsolataGoNerd' }}"
+        path: "{{ font_dir + '/InconsolataGoNerd' }}"
         state: directory
         mode: '0755'
       become: true
@@ -88,7 +88,7 @@
     - name: "Install Inconsolata Go Nerd Font - {{ inconsolatago_nerd_json.json.tag_name }} | unarchive"
       ansible.builtin.unarchive:
         src: "/tmp/inconsolatago_nerd-{{ inconsolatago_nerd_json.json.tag_name }}.zip"
-        dest: "{{ font_dir +'/InconsolataGoNerd/' }}"
+        dest: "{{ font_dir + '/InconsolataGoNerd/' }}"
       become: true
       when: inconsolatago_download_result.status_code == 200
   - name: Refresh Fontconfig cache | shell
