@@ -16,9 +16,9 @@ all:
               ansible_become_pass: "{{ paulina_macbook_pro_m1_pass }}"
           vars:
             users:
-            - michal
-            - paulina
-            - macadmin
+              - michal
+              - paulina
+              - macadmin
         linux:
           hosts:
             dinth-mint:
@@ -28,8 +28,8 @@ all:
               ansible_become_pass: "{{ dinth_mint_pass }}"
           vars:
             users:
-            - dinth
-            - root
+              - dinth
+              - root
 
     servers:
       hosts:

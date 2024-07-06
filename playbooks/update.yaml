@@ -2,7 +2,7 @@
   hosts: all
   become: true
   tasks:
-  - include: ../roles/update_apt.yaml
-    when: ansible_distribution == "Debian" or ansible_distribution == "Linux Mint" or ansible_distribution == "Ubuntu"
-  - include: ../roles/update_osx.yaml
-    when: ansible_distribution == "MacOSX"
+    - include: ../roles/update_apt.yaml
+      when: ansible_distribution == "Debian" or ansible_distribution == "Linux Mint" or ansible_distribution == "Ubuntu"
+    - include: ../roles/update_osx.yaml
+      when: ansible_distribution == "MacOSX"
