@@ -46,8 +46,8 @@
       register: ubuntusans_nerd_json
     - name: "Download UbuntuSans Nerd Font - {{ ubuntusans_nerd_json.json.tag_name }} | get_url"
       get_url:
-        url: "https://github.com/ryanoasis/nerd-fonts/releases/download/{{ubuntusans_nerd_json.json.tag_name}}/UbuntuSans.zip"
-        dest: "/tmp/ubuntusans_nerd-{{ubuntusans_nerd_json.json.tag_name}}.zip"
+        url: "https://github.com/ryanoasis/nerd-fonts/releases/download/{{ ubuntusans_nerd_json.json.tag_name }}/UbuntuSans.zip"
+        dest: "/tmp/ubuntusans_nerd-{{ ubuntusans_nerd_json.json.tag_name }}.zip"
         force: true
       register: ubuntusans_download_result
       failed_when: ubuntusans_download_result.status_code != 200
