@@ -15,11 +15,11 @@ all:
               ansible_password: "{{ paulina_macbook_pro_m1_pass }}"
               ansible_become_pass: "{{ paulina_macbook_pro_m1_pass }}"
           vars:
-            users: 
+            users:
             - michal
             - paulina
             - macadmin
-        linux:        
+        linux:
           hosts:
             dinth-mint:
               ansible_host: 10.10.10.10
@@ -30,7 +30,7 @@ all:
             users:
             - dinth
             - root
-      
+
     servers:
       hosts:
         r720-omv:
@@ -47,6 +47,11 @@ all:
           ansible_user: dinth
           ansible_password: "{{ raspberrypi_hyperion_pass }}"
           ansible_become_pass: "{{ raspberrypi_hyperion_pass }}"
+        r230-proxmox:
+          ansible_host: 10.10.1.16
+          ansible_user: dinth
+          ansible_password: "{{ r230_proxmox_pass }}"
+          ansible_become_pass: "{{ r230_proxmox_pass }}"
       vars:
         users:
           - root

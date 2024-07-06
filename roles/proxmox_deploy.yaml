@@ -1,0 +1,118 @@
+- name: Deploy Proxmox server (R230)
+  hosts: r230-proxmox
+  gather_facts: no
+  tasks:
+    - name: Configure NTP on iDRAC
+      dellemc.openmanage.idrac_timezone_ntp:
+        idrac_ip: 10.10.1.26
+        idrac_user: "{{ idrac_username }}"
+        idrac_password: "{{ idrac_password }}"
+        validate_certs: false
+        ntp_server_1: 10.10.0.1
+        setup_idrac_timezone: "Europe/London"
+      delegate_to: 127.0.0.1
+      tags: idrac
+# Cant make any of the below work
+#    - name: Install Debian on the server
+#      dellemc.openmanage.idrac_os_deployment:
+#        idrac_ip: 10.10.1.26
+#        idrac_user: "{{ idrac_username }}"
+#        idrac_password: "{{ idrac_password }}"
+#        share_name: "10.10.1.13:/export/ISOs"
+#        share_user: "{{ smb_share_username }}"
+#        share_password: "{{ smb_share_password }}"
+#        iso_image: "faime-bookworm.iso"
+#        validate_certs: false
+#      delegate_to: 127.0.0.1
+#    - name: Mount installation ISO
+#      dellemc.openmanage.idrac_virtual_media:
+#        idrac_ip: 10.10.1.26
+#        idrac_user: "{{ idrac_username }}"
+#        idrac_password: "{{ idrac_password }}"
+#        validate_certs: false
+#        force: true
+#        virtual_media:
+#          - insert: true
+#            image: "10.10.1.13:/export/ISOs/faime-bookworm.iso"
+#            media_type: DVD
+#      delegate_to: 127.0.0.1
+    - name: Set hostname | hostname
+      become: true
+      ansible.builtin.hostname:
+        name: r230-proxmox
+        use: systemd
+    - name: Modify /etc/hosts with hostname | lineinfile
+      become: true
+      ansible.builtin.lineinfile:
+        path: /etc/hosts
+        line: 10.10.1.16 r230-proxmox.wickhay r230-proxmox
+        state: present
+    - name: Add Proxmox repository
+      become: true
+      block:
+        - name: Add repository key | get-url
+          ansible.builtin.get_url:
+           dest: /etc/apt/trusted.gpg.d/proxmox-release-bookworm.gpg
+           url: https://enterprise.proxmox.com/debian/proxmox-release-bookworm.gpg
+        - name: Add repository to sources.list | apt_repository
+          ansible.builtin.apt_repository:
+            repo: "deb [arch=amd64] http://download.proxmox.com/debian/pve bookworm pve-no-subscription"
+            state: present
+            filename: pve-install-repo
+    - name: Update local system | apt
+      become: true
+      ansible.builtin.apt:
+        update_cache: true
+        upgrade: full
+    - name: Remove conflicting packages | apt
+      become: true
+      ansible.builtin.apt:
+        name: firmware-ath9k-htc
+        state: absent
+    - name: Install Proxmox kernel | apt
+      become: true
+      ansible.builtin.apt:
+        name: proxmox-default-kernel
+        state: present
+      register: proxmoxkernel
+    - name: Reboot | reboot
+      become: true
+      ansible.builtin.reboot:
+        msg: Rebooting...
+      when: proxmoxkernel.changed
+    - name: Install the remaining packages | apt
+      become: true
+      ansible.builtin.apt:
+        name:
+          - proxmox-ve
+          - postfix
+          - open-iscsi
+          - chrony
+        state: present
+    - name: Remove Proxmox Enterprise update repo | file
+      become: true
+      ansible.builtin.file:
+        path: /etc/apt/sources.list.d/pve-enterprise.list
+        state: absent
+    - name: Remove os-prober | apt
+      become: true
+      ansible.builtin.apt:
+        name: os-prober
+        state: absent
+    - name: Remove Debian kernel | apt
+      become: true
+      ansible.builtin.apt:
+        name:
+          - linux-image-amd64
+          - linux-image-6*
+        state: absent
+    - name: Update grub | command
+      become: true
+      ansible.builtin.command:
+        cmd: /usr/sbin/update-grub
+    - name: Change root password | user
+      become: true
+      ansible.builtin.user:
+        name: root
+        password: "{{ r230_proxmox_root_pass | password_hash('sha512','') }}"
+        update_password: always
