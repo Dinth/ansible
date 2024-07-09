@@ -1,0 +1,9 @@
+- name: Install printers
+  hosts: workstations
+  tasks:
+    - ansible.builtin.include_tasks:
+        file: ./install_printer_mac.yaml
+      when: ansible_distribution == "MacOSX"
+    - ansible.builtin.include_tasks:
+        file: ./install_printer_deb.yaml
+      when: ansible_distribution == "Debian" or ansible_distribution == "Ubuntu" or ansible_distribution == "Linux Mint"
