@@ -2,25 +2,25 @@
   hosts: all
   tasks:
   - name: Check if neovim is installed | shell
-    shell:
+    ansible.builtin.shell:
       cmd: which nvim
     check_mode: false
     changed_when: false
     register: nvim_which_result
     failed_when: nvim_which_result.rc != 0
   - name: Abort if neovim is missing | fail
-    fail:
+    ansible.builtin.fail:
       msg: "NeoVim is missing. Aborting."
     when: nvim_which_result.rc != 0
   - name: Check if mc is installed | shell
-    shell:
+    ansible.builtin.shell:
       cmd: which mc
     check_mode: false
     changed_when: false
     register: mc_which_result
   - name: Set neovim as a default editor on Debian derivatives | shell
     become: true
-    shell:
+    ansible.builtin.shell:
       cmd: "update-alternatives --set {{ item }} {{ nvim_which_result.stdout }}"
     loop:
     - editor
