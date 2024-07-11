@@ -1,8 +1,15 @@
 - name: Install printers
-  hosts: workstations
+#  hosts: workstations
+  hosts: michal-macbook-pro-m1
+  vars:
+      # taking the link from european version of Canon website and resolving the redirect via wget
+      # temporary measure, in the future i would like to automatically download the latest version of the driver somehow
+    driver_lnx: "https://gdlp01.c-wss.com/gds/8/0100007658/40/linux-UFRII-drv-v590-m17n-03.tar.gz"
+    driver_osx: "https://gdlp01.c-wss.com/gds/8/0100012238/02/mac-UFRII-LIPSLX-v101919-06.dmg"
+    driver_scan_osx: "https://gdlp01.c-wss.com/gds/5/0100012265/01/mac-scan-v21515-00.dmg"
   tasks:
     - ansible.builtin.include_tasks:
-        file: ./install_printer_mac.yaml
+        file: ./install_printer_osx.yaml
       when: ansible_distribution == "MacOSX"
     - ansible.builtin.include_tasks:
         file: ./install_printer_deb.yaml

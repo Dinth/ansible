@@ -1,0 +1,47 @@
+- name: Download the linux driver package | get_url
+  ansible.builtin.get_url:
+    url: "{{ driver_lnx }}"
+    dest: /tmp/mf270_driver.tar.gz
+    force: true
+  register: downloaded
+- name: Create a temp directory | file
+  ansible.builtin.file:
+    path: /tmp/mf270_driver
+    state: directory
+  when: downloaded.status_code == 200
+- name: Unarchive the linux package | unarchive
+  ansible.builtin.unarchive:
+    src: /tmp/mf270_driver.tar.gz
+    dest: /tmp/mf270_driver
+    extra_opts: ['--strip-components=1', '--show-stored-names']
+  when: downloaded.status_code == 200
+- name: Find the extracted deb file name | find
+  ansible.builtin.find:
+    path: /tmp/mf270_driver/x64/Debian
+    patterns: '*.deb'
+  register: filename_search
+- name: Check installed package facts | package_facts
+  ansible.builtin.package_facts:
+    manager: "apt"
+- name: Set variables | set_fact
+  ansible.builtin.set_fact:
+    filename: "{{ filename_search.files[0].path | basename }}"
+    new_version: "{{ filename_search.files[0].path | basename | regex_search('_([0-9-\\.]+)_','\\1') | first }}"
+    current_version: "{{ ansible_facts.packages['cnrdrvcups-ufr2-uk'][0].version }}"
+- name: Info | debug
+  ansible.builtin.debug:
+    msg: "Driver not installed. Installing version {{ new_version }}..."
+  when: current_version is not defined
+- name: Info | debug
+  ansible.builtin.debug:
+    msg: "Current version: {{ current_version }}\nNew version: {{ new_version }}.\n Proceeding with update..."
+  when: current_version != new_version
+- name: Info | fail
+  ansible.builtin.fail:
+    msg: "Current version is the same as new version."
+  when: current_version == new_version
+- name: Install the package | apt
+  become: true
+  ansible.builtin.apt:
+    deb: "/tmp/mf270_driver/x64/Debian/{{ filename }}"
+  when: new_version != current_version

@@ -10,10 +10,13 @@
     get_url:
       url: "https://github.com/Homebrew/brew/releases/download/{{ homebrew_json.json.tag_name }}/Homebrew-{{ homebrew_json.json.tag_name }}.pkg"
       dest: /tmp/homebrew-latest.pkg
+      force: true
+    register: downloaded
   - name: Install downloaded pkg | cmd
+    become: true
     ansible.builtin.command:
       cmd: installer -pkg /tmp/homebrew-latest.pkg -target /
-    become: true
+    when: downloaded.status_code == 200
   - name: Configure repository origin | cmd
     ansible.builtin.command:
       cmd: 'git -C "/opt/homebrew" remote add origin https://github.com/Homebrew/brew'

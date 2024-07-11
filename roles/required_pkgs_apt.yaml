@@ -11,7 +11,7 @@
   become: true
   ansible.builtin.apt:
     state: latest
-    update_cache: true
+    update_cache: false
     name: neovim
   register: output
 - name: Show output
@@ -20,8 +20,26 @@
   become: true
   ansible.builtin.apt:
     state: latest
-    update_cache: true
+    update_cache: false
     name: zsh
+  register: output
+- name: Show output
+  debug: msg="{{ output.stdout_lines }}"
+- name: Install hwinfo on Debian derivatives | apt
+  become: true
+  ansible.builtin.apt:
+    state: latest
+    update_cache: false
+    name: hwinfo
+  register: output
+- name: Show output
+  debug: msg="{{ output.stdout_lines }}"
+- name: Install inxi on Debian derivatives | apt
+  become: true
+  ansible.builtin.apt:
+    state: latest
+    update_cache: false
+    name: inxi
   register: output
 - name: Show output
   debug: msg="{{ output.stdout_lines }}"
