@@ -1,4 +1,4 @@
-- name: Install SSH certificates
+- name: Configure SSH on endpoints
   hosts: all
   vars:
     users:
