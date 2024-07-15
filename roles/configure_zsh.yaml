@@ -1,5 +1,5 @@
 - name: Configure zsh
-  hosts: dinth-mint
+  hosts: all
   vars:
     zsh_theme: agnoster
     zsh_plugins: "1password"

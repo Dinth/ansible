@@ -1,0 +1,7 @@
+- name: Install SSH certificates
+  hosts: all
+  vars:
+    users:
+      - dinth
+      - root
+  tasks:

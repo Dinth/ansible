@@ -1,0 +1,4 @@
+- name: Install Wazah
+  hosts: all
+  tasks:
+  
