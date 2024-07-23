@@ -1,3 +1,5 @@
 /.master_passwd
+/.cert
+/roles/files/certs/id_ed25519_ansible
 /inventory/group_vars/all.yaml
 /ansible.log

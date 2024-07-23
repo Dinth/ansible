@@ -1,7 +1,17 @@
 - name: Configure SSH on endpoints
   hosts: all
-  vars:
-    users:
-      - dinth
-      - root
   tasks:
+    - name: "Deploy public certificates | authorized_keys"
+      ansible.posix.authorized_key:
+        user: "{{ item }}"
+        state: present
+        key: https://github.com/dinth.keys
+        exclusive: true
+      loop: "{{ ssh_users}}"
+    - name: "Deploy private certificates | copy"
+      ansible.builtin.copy:
+        src:
+        dest: "/{% if ansible_distrubtion == 'MacOSX' %}Users{% else %}home{% endif %}/"
+        decrypt: yes
+        mode: 0600
+#      when: inventory_hostname in groups['workstations']

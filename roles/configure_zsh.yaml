@@ -31,6 +31,12 @@
       path: "~/.oh-my-zsh"
     register: oh_my_zsh_stat
     loop: "{{ users }}"
+  - name: Sets ZSH as default shell | user
+    become: true
+    ansible.builtin.user:
+      name: "{{ item }}"
+      shell: /bin/zsh
+    loop: "{{ users }}"
   - name: Installs Oh My ZSH | shell
     become: true
     become_user: "{{ item }}"

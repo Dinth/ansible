@@ -19,6 +19,9 @@ all:
               - michal
               - paulina
               - macadmin
+            ssh_users:
+              - michal
+              - macadmin
         linux:
           hosts:
             dinth-mint:
@@ -30,29 +33,33 @@ all:
             users:
               - dinth
               - root
+            ssh_users:
+              - dinth
+              - root
 
     servers:
       hosts:
         r720-omv:
           ansible_host: 10.10.1.13
           ansible_user: root
-          ansible_password: "{{ r720_omv_pass }}"
+#          ansible_password: "{{ r720_omv_pass }}"
         rpi-streamdeck:
           ansible_host: 10.10.25.41
           ansible_user: dinth
-          ansible_password: "{{ rpi_streamdeck_pass }}"
+#          ansible_password: "{{ rpi_streamdeck_pass }}"
           ansible_become_pass: "{{ rpi_streamdeck_pass }}"
         raspberrypi-hyperion:
           ansible_host: 10.10.25.20
           ansible_user: dinth
-          ansible_password: "{{ raspberrypi_hyperion_pass }}"
+#          ansible_password: "{{ raspberrypi_hyperion_pass }}"
           ansible_become_pass: "{{ raspberrypi_hyperion_pass }}"
         r230-proxmox:
           ansible_host: 10.10.1.16
           ansible_user: dinth
-          ansible_password: "{{ r230_proxmox_pass }}"
+#          ansible_password: "{{ r230_proxmox_pass }}"
           ansible_become_pass: "{{ r230_proxmox_pass }}"
       vars:
         users:
           - root
-          - dinth
+        ssh_users:
+          - root
