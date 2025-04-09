@@ -1,0 +1,10 @@
+- name: Enable remote docker access
+  hosts: docker-servers
+  tasks:
+  - name: Creating overwrite file for systemctl
+    ansible.builtin.copy:
+      dest: /etc/systemd/system/docker.service.d/override.conf
+      content: |
+        [Service]
+        ExecStart=
+        ExecStart=/usr/bin/dockerd
