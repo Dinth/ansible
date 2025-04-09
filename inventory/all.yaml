@@ -20,7 +20,7 @@ all:
     servers:
       children:
         docker_servers:
-          hosts:  
+          hosts:
             r720-omv:
               ansible_host: 10.10.1.13
               ansible_user: root
