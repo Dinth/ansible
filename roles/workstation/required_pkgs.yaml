@@ -1,0 +1,5 @@
+- name: Install required packages
+  hosts: workstations
+  tasks:
+  - include: ./required_pkgs_wks_apt.yaml
+    when: ansible_distribution == "Debian" or ansible_distribution == "Ubuntu" or ansible_distribution == "Linux Mint"

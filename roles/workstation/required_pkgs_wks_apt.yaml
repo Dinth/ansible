@@ -1,11 +1,10 @@
-- name: Update all apt packages | apt
+- name: Install NextCloud Desktop on Debian derivatives | apt
+  hosts: linux
+  become: true
   ansible.builtin.apt:
     state: latest
-    name: "*"
-    force_apt_get: true
-    autoremove: true
     update_cache: true
+    name: mc
   register: output
 - name: Show output
   debug: msg="{{ output.stdout_lines }}"
-  when: output.changed
