@@ -1,8 +1,0 @@
-- name: Install XCode Command Line Tools on Mac Computer
-  hosts: osx
-  gather_facts: false
-  tasks:
-  - name: Run the installation script | script
-    ansible.builtin.script: ./files/install_xcode_clt_on_osx.sh
-    args:
-      creates: /Library/Developer/CommandLineTools

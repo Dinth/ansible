@@ -5,6 +5,3 @@
     - ansible.builtin.include_tasks:
         file: ../roles/update_apt.yaml
       when: ansible_distribution == "Debian" or ansible_distribution == "Linux Mint" or ansible_distribution == "Ubuntu"
-    - ansible.builtin.include_tasks:
-        file: ../roles/update_osx.yaml
-      when: ansible_distribution == "MacOSX"

@@ -2,26 +2,6 @@ all:
   children:
     workstations:
       children:
-        osx:
-          hosts:
-            michal-macbook-pro-m1:
-              ansible_host: 10.10.10.11
-              ansible_user: macadmin
-              ansible_password: "{{ michal_macbook_pro_m1_pass }}"
-              ansible_become_pass: "{{ michal_macbook_pro_m1_pass }}"
-            paulina-macbook-pro-m1:
-              ansible_host: 10.10.10.12
-              ansible_user: macadmin
-              ansible_password: "{{ paulina_macbook_pro_m1_pass }}"
-              ansible_become_pass: "{{ paulina_macbook_pro_m1_pass }}"
-          vars:
-            users:
-              - michal
-              - paulina
-              - macadmin
-            ssh_users:
-              - michal
-              - macadmin
         linux:
           hosts:
             dinth-mint:

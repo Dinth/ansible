@@ -3,5 +3,3 @@
   tasks:
   - include: ./required_pkgs_apt.yaml
     when: ansible_distribution == "Debian" or ansible_distribution == "Ubuntu" or ansible_distribution == "Linux Mint"
-  - include: ./required_pkgs_osx.yaml
-    when: ansible_distribution == "MacOSX"

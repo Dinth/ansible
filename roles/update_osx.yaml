@@ -1,8 +1,0 @@
-- name: Update all App Store applications | mas
-  community.general.mas:
-    upgrade_all: true
-- name: Update all Homebrew packages | homebrew
-  community.general.homebrew:
-    update_homebrew: true
-    upgrade_all: true
-    greedy: true

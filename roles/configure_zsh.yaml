@@ -5,7 +5,6 @@
     zsh_plugins: "1password"
     zsh_plugins_linux: ""
     zsh_plugins_servers: ""
-    zsh_plugins_osx: ""
   tasks:
   - name: Check if zsh is installed | shell
     shell: which zsh
@@ -114,13 +113,3 @@
       line: "plugins=({{ zsh_plugins + ' fzf zsh-autosuggestions zsh-syntax-highlighting ' + zsh_plugins_server }})"
     loop: "{{ users }}"
     when: inventory_hostname in groups['servers']
-  - name: Set Oh My ZSH plugins - osx | lineinfile
-    become: true
-    become_user: "{{ item }}"
-    ansible.builtin.lineinfile:
-      state: present
-      path: "~/.zshrc"
-      regexp: "^plugins="
-      line: "plugins=({{ zsh_plugins + ' fzf zsh-autosuggestions zsh-syntax-highlighting ' + zsh_plugins_osx }})"
-    loop: "{{ users }}"
-    when: inventory_hostname in groups['osx']

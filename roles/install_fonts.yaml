@@ -2,7 +2,6 @@
   hosts: workstations
   vars:
     font_dir_linux: /usr/share/fonts/truetype
-    font_dir_darwin: /Library/Fonts
     font_dir: "{{ lookup('vars','font_dir_'+ansible_os_family|lower, default=font_dir_linux) }}"
     default_terminal_font: "InconsolataGo Nerd Font 11"
   tasks:
