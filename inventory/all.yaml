@@ -18,11 +18,14 @@ all:
               - root
 
     servers:
+      children:
+        docker_servers:
+          hosts:  
+            r720-omv:
+              ansible_host: 10.10.1.13
+              ansible_user: root
+#              ansible_password: "{{ r720_omv_pass }}"
       hosts:
-        r720-omv:
-          ansible_host: 10.10.1.13
-          ansible_user: root
-#          ansible_password: "{{ r720_omv_pass }}"
         rpi-streamdeck:
           ansible_host: 10.10.25.41
           ansible_user: dinth

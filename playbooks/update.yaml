@@ -3,5 +3,5 @@
   become: true
   tasks:
     - ansible.builtin.include_tasks:
-        file: ../roles/update_apt.yaml
+        file: ../playbooks/update_apt.yaml
       when: ansible_distribution == "Debian" or ansible_distribution == "Linux Mint" or ansible_distribution == "Ubuntu"
