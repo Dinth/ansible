@@ -41,6 +41,10 @@ all:
           ansible_user: dinth
 #          ansible_password: "{{ r230_proxmox_pass }}"
           ansible_become_pass: "{{ r230_proxmox_pass }}"
+        rpi-noisebuster:
+          ansible_host: 10.10.25.43
+          ansible_user: root
+          ansible_become_pass: "{{ rpi_noisebuster_pass }}"
       vars:
         users:
           - root
